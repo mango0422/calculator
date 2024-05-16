@@ -29,6 +29,7 @@ pipeline{
                 script {
                     dockerImage = docker.build repository + ":$BUILD_NUMBER"
                 }
+                sh 'docker image tag $repository:$BUILD_NUMBER $repository:latest'
                 // sh '''docker build -t mango0422/homepage:0.1 .'''
                 // sh '''docker tag mango0422/homepage:0.1 mango0422/homepage:latest'''
                 // sh '''docker tag mango0422/spring:$(docker images | awk '($1 == "mango0422/spring") {print $2; exit}') mango0422/spring:latest'''
@@ -45,7 +46,8 @@ pipeline{
             steps { 
                 script {
                     sh 'docker push $repository:$BUILD_NUMBER' //docker push
-                } 
+                    sh 'docker push $repository:latest'
+                }
             }
     } 
         stage('Deploy') {
